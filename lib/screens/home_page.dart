@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final nameController = new TextEditingController();
   Position? _currentPosition;
 
   @override
@@ -65,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: EdgeInsets.only(top: 300),
                     child: Form(
                       child: TextFormField(
+                        controller: nameController,
                         decoration:
                             InputDecoration(labelText: 'Enter your name'),
                       ),
