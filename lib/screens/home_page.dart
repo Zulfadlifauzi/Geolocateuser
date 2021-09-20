@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:locategeouser/models/create_model.dart';
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,9 +14,34 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+Future<CreateUserRequest> createUser(String name, String latitude, String longitude) async {
+  final String apiUrl = 'http://api.staging.tarsoft.co/api/coordinates/create';
+
+  final response = await http.post(Uri.parse('$apiUrl'), body: {'name': name,'latitude':latitude,'longitude':longitude});
+  if (response.statusCode == 200 || response.statusCode == 500) {
+    print(response.statusCode);
+    print(response.body);
+    return CreateUserRequest.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   final nameController = new TextEditingController();
+  final latController = new TextEditingController();
+  final longController = new TextEditingController();
+
+  late CreateUserRequest _user;
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Position? _currentPosition;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = new CreateUserRequest();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                         'Enable your location ! \nFor new live shipping experience',
                         style: GoogleFonts.varela(
-                          fontSize: 15,
+                          fontSize: 15, 
                         )),
                   ),
                 ),
@@ -65,11 +94,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     margin: EdgeInsets.only(top: 300),
                     child: Form(
-                      child: TextFormField(
+                     key: formKey,
+                     child: Column(
+                       children: [
+                      TextFormField(
+                        onSaved: (input) => _user.data = input as DataResponse?,
                         controller: nameController,
                         decoration:
                             InputDecoration(labelText: 'Enter your name'),
                       ),
+                       TextFormField(
+                         controller: longController,
+                        onSaved: (input) =>_user.data = input as DataResponse?,
+                        decoration:
+
+                            InputDecoration(labelText: 'Enter your longitude'),
+                      ),
+                      TextFormField(
+                        controller:latController,
+                        onSaved: (input) =>_user.data = input as DataResponse?,
+                        decoration:
+                            InputDecoration(labelText: 'Enter your latitude'),
+                      ),
+
+
+                       ],
+                     ),
                     ),
                   ),
                 )
@@ -89,9 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       SizedBox(height: 15),
-                      if (_currentPosition != null)
-                        Text(
-                            'Longitude: ${_currentPosition!.longitude} \nLatitude: ${_currentPosition!.latitude}'),
                       TextButton(
                         child: Text('Get Location'),
                         onPressed: () {
@@ -115,16 +162,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.redAccent,
                           borderRadius: BorderRadius.circular(5.0)),
                       child: TextButton(
-                        onPressed: () {
-                          Text('Create shippng');
-                          print(Text);
+                        onPressed: () async {
+                          final String name = nameController.text;
+                          final String latitude = latController.text;
+                          final String longitude = longController.text;
+
+                          final CreateUserRequest user = await createUser(name,latitude,longitude);
+                          setState(() {
+                            _user = user;
+                          });
                         },
                         child: Text(
                           'Start Shipping',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

@@ -1,18 +1,18 @@
-class CreateUserResponse {
+class CreateUserRequest {
   String? message;
-  Data? data;
+  DataResponse? data;
 
-  CreateUserResponse({this.message, this.data});
+  CreateUserRequest({this.message, this.data});
 
-  factory CreateUserResponse.fromJson(Map<String, dynamic> json) =>
-      CreateUserResponse(
-          message: json['message'], data: Data.fromJson(json['data']));
+  factory CreateUserRequest.fromJson(Map<String, dynamic> json) =>
+      CreateUserRequest(
+          message: json['message'], data: DataResponse.fromJson(json['data']));
 
   Map<String, dynamic> toJson() => {'message': message, 'data': data!.toJson()};
 }
 
-class Data {
-  Data({
+class DataResponse {
+  DataResponse({
     this.latitude,
     this.longitude,
     this.name,
@@ -28,7 +28,7 @@ class Data {
   DateTime? createdAt;
   int? id;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory DataResponse.fromJson(Map<String, dynamic> json) => DataResponse(
         latitude: json["latitude"],
         longitude: json["longitude"],
         name: json["name"],
@@ -45,4 +45,5 @@ class Data {
         "created_at": createdAt!.toIso8601String(),
         "id": id,
       };
+
 }
