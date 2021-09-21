@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:locategeouser/models/create_model.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
+import 'package:cron/cron.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,6 +30,16 @@ Future<CreateUserRequest> createUser(
   }
 }
 
+main() {
+  final cron = Cron();
+  cron.schedule(Schedule.parse('*/3 * * * *'), () async {
+    print('every three minutes');
+  });
+  cron.schedule(Schedule.parse('8-11 * * * *'), () async {
+    print('between every 8 and 11 minutes');
+  });
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   final nameController = new TextEditingController();
   final latController = new TextEditingController();
@@ -49,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     longController.text = '${_currentPosition?.longitude}';
     latController.text = '${_currentPosition?.latitude}';
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -112,14 +123,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           TextFormField(
                             enabled: false,
                             controller: longController,
-                            decoration: InputDecoration(
-                                labelText: 'Your longitude'),
+                            decoration:
+                                InputDecoration(labelText: 'Your longitude'),
                           ),
                           TextFormField(
                             enabled: false,
                             controller: latController,
-                            decoration: InputDecoration(
-                                labelText: 'Your latitude'),
+                            decoration:
+                                InputDecoration(labelText: 'Your latitude'),
                           ),
                         ],
                       ),
@@ -164,10 +175,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(5.0)),
                       child: TextButton(
                         onPressed: () async {
+                          final cron = Cron();
+                          cron.schedule(Schedule.parse('*/3 * * * * *'),
+                              () async {
+                            print(DateTime.now());
+                          });
+                          cron.schedule(Schedule.parse('8-11 * * * * *'),
+                              () async {
+                            print('between every 8 and 11 minutes');
+                          });
+
                           final String name = nameController.text;
                           final String latitude = latController.text;
                           final String longitude = longController.text;
-
                           final CreateUserRequest user =
                               await createUser(name, latitude, longitude);
                           setState(() {
@@ -202,4 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
       print(e);
     });
   }
+
+  void schedule(Schedule schedule, Null Function() param1) {}
 }
