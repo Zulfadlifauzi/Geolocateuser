@@ -14,10 +14,12 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-Future<CreateUserRequest> createUser(String name, String latitude, String longitude) async {
+Future<CreateUserRequest> createUser(
+    String name, String latitude, String longitude) async {
   final String apiUrl = 'http://api.staging.tarsoft.co/api/coordinates/create';
 
-  final response = await http.post(Uri.parse('$apiUrl'), body: {'name': name,'latitude':latitude,'longitude':longitude});
+  final response = await http.post(Uri.parse('$apiUrl'),
+      body: {'name': name, 'latitude': latitude, 'longitude': longitude});
   if (response.statusCode == 200 || response.statusCode == 500) {
     print(response.statusCode);
     print(response.body);
@@ -45,6 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    longController.text = '${_currentPosition?.longitude}';
+    latController.text = '${_currentPosition?.latitude}';
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -67,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                         'Enable your location ! \nFor new live shipping experience',
                         style: GoogleFonts.varela(
-                          fontSize: 15, 
+                          fontSize: 15,
                         )),
                   ),
                 ),
@@ -94,32 +99,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     margin: EdgeInsets.only(top: 300),
                     child: Form(
-                     key: formKey,
-                     child: Column(
-                       children: [
-                      TextFormField(
-                        onSaved: (input) => _user.data = input as DataResponse?,
-                        controller: nameController,
-                        decoration:
-                            InputDecoration(labelText: 'Enter your name'),
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            onSaved: (input) =>
+                                _user.data = input as DataResponse?,
+                            controller: nameController,
+                            decoration:
+                                InputDecoration(labelText: 'Enter your name'),
+                          ),
+                          TextFormField(
+                            enabled: false,
+                            controller: longController,
+                            decoration: InputDecoration(
+                                labelText: 'Your longitude'),
+                          ),
+                          TextFormField(
+                            enabled: false,
+                            controller: latController,
+                            decoration: InputDecoration(
+                                labelText: 'Your latitude'),
+                          ),
+                        ],
                       ),
-                       TextFormField(
-                         controller: longController,
-                        onSaved: (input) =>_user.data = input as DataResponse?,
-                        decoration:
-
-                            InputDecoration(labelText: 'Enter your longitude'),
-                      ),
-                      TextFormField(
-                        controller:latController,
-                        onSaved: (input) =>_user.data = input as DataResponse?,
-                        decoration:
-                            InputDecoration(labelText: 'Enter your latitude'),
-                      ),
-
-
-                       ],
-                     ),
                     ),
                   ),
                 )
@@ -129,15 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 40, right: 40),
                 child: Container(
-                  margin: EdgeInsets.only(top: 370),
+                  margin: EdgeInsets.only(top: 535),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Location',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
+                      // if (_currentPosition != null)
+                      //   Text(
+                      //       'Longitude: ${_currentPosition!.longitude} \nLatitude: ${_currentPosition!.latitude}'),
                       SizedBox(height: 15),
                       TextButton(
                         child: Text('Get Location'),
@@ -167,7 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           final String latitude = latController.text;
                           final String longitude = longController.text;
 
-                          final CreateUserRequest user = await createUser(name,latitude,longitude);
+                          final CreateUserRequest user =
+                              await createUser(name, latitude, longitude);
                           setState(() {
                             _user = user;
                           });
