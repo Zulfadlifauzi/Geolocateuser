@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,8 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    longController.text = '${_currentPosition?.longitude}';
-    latController.text = '${_currentPosition?.latitude}';
+    longController.text = '${_currentPosition?.longitude.toString() ?? ''}';
+    latController.text = '${_currentPosition?.latitude.toString() ?? ''}';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -113,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           TextFormField(
                             onSaved: (input) =>
-                                _user.data = input as DataResponse?,
+                            _user.data = input as DataResponse?,
                             controller: nameController,
                             decoration:
                                 InputDecoration(labelText: 'Enter your name'),
