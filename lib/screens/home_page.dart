@@ -30,14 +30,13 @@ Future<CreateUserRequest> createUser(
   }
 }
 
-main() {
-  final cron = Cron();
-  cron.schedule(Schedule.parse('*/3 * * * *'), () async {
-    print('every three minutes');
-  });
-  cron.schedule(Schedule.parse('8-11 * * * *'), () async {
-    print('between every 8 and 11 minutes');
-  });
+Future<void> main() async {
+  final cron = Cron()
+    ..schedule(Schedule.parse('*/6 * * * * *'), () {
+      print(DateTime.now());
+    });
+  await Future.delayed(Duration(seconds: 10));
+  await cron.close();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -46,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final longController = new TextEditingController();
 
   late CreateUserRequest _user;
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Position? _currentPosition;
 
@@ -175,16 +173,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(5.0)),
                       child: TextButton(
                         onPressed: () async {
-                          final cron = Cron();
-                          cron.schedule(Schedule.parse('*/3 * * * * *'),
-                              () async {
-                            print(DateTime.now());
-                          });
-                          cron.schedule(Schedule.parse('8-11 * * * * *'),
-                              () async {
-                            print('between every 8 and 11 minutes');
-                          });
-
+                            final cron = Cron()
+                        ..schedule(Schedule.parse('*/10 * * * * *'), () async {
                           final String name = nameController.text;
                           final String latitude = latController.text;
                           final String longitude = longController.text;
@@ -193,6 +183,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           setState(() {
                             _user = user;
                           });
+                        print(DateTime.now());
+                        });
+                        await Future.delayed(Duration(days: 1));
+                        await cron.close();
                         },
                         child: Text(
                           'Start Shipping',
