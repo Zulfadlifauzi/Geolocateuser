@@ -29,15 +29,6 @@ Future<CreateUserRequest> createUser(
   }
 }
 
-Future<void> main() async {
-  final cron = Cron()
-    ..schedule(Schedule.parse('*/6 * * * * *'), () {
-      print(DateTime.now());
-    });
-  await Future.delayed(Duration(seconds: 10));
-  await cron.close();
-}
-
 class _HomeScreenState extends State<HomeScreen> {
   final nameController = new TextEditingController();
   final latController = new TextEditingController();
@@ -112,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           TextFormField(
                             onSaved: (input) =>
-                            _user.data = input as DataResponse?,
+                                _user.data = input as DataResponse?,
                             controller: nameController,
                             decoration:
                                 InputDecoration(labelText: 'Enter your name'),
@@ -172,20 +163,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(5.0)),
                       child: TextButton(
                         onPressed: () async {
-                            final cron = Cron()
-                        ..schedule(Schedule.parse('*/10 * * * * *'), () async {
-                          final String name = nameController.text;
-                          final String latitude = latController.text;
-                          final String longitude = longController.text;
-                          final CreateUserRequest user =
-                              await createUser(name, latitude, longitude);
-                          setState(() {
-                            _user = user;
-                          });
-                        print(DateTime.now());
-                        });
-                        await Future.delayed(Duration(days: 1));
-                        await cron.close();
+                          final cron = Cron()
+                            ..schedule(Schedule.parse('*/10 * * * * *'),
+                                () async {
+                              final String name = nameController.text;
+                              final String latitude = latController.text;
+                              final String longitude = longController.text;
+                              final CreateUserRequest user =
+                                  await createUser(name, latitude, longitude);
+                              setState(() {
+                                _user = user;
+                              });
+                              print(DateTime.now());
+                            });
+                          await Future.delayed(Duration(days: 1));
+                          await cron.close();
                         },
                         child: Text(
                           'Start Shipping',
