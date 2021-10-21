@@ -3,8 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get.dart';
-import 'package:locategeouser/screens/new.dart';
+import 'package:locategeouser/screens/selection.dart';
 // import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -36,7 +35,7 @@ class NotifyHelper {
   }
 
   Future selectNotification(String? payload) => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => NewPages(payload)));
+      context, MaterialPageRoute(builder: (context) => SelectionScreen()));
 
   displayNotification({required String title, required String body}) async {
     print("Successfully");
@@ -58,6 +57,7 @@ class NotifyHelper {
 
   Future scheduledNotification(
       {required String title, required String body}) async {
+    print('Scheduled successfully');
     var interval = RepeatInterval.everyMinute;
     var bigPicture = BigPictureStyleInformation(
         DrawableResourceAndroidBitmap("icon"),
@@ -95,7 +95,7 @@ class NotifyHelper {
       int id, String? title, String? body, String? payload) async {
     // display a dialog with the notification details, tap ok to go to another page
     showDialog(
-      //context: context,
+      context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
         title: Text(title!),
         content: Text(body!),
@@ -108,14 +108,13 @@ class NotifyHelper {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NewPages(payload),
+                  builder: (context) => SelectionScreen(),
                 ),
               );
             },
           )
         ],
       ),
-      context: null!,
     );
   }
 }

@@ -52,12 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.yellow[600],
+        centerTitle: true,
         title: Text(
           'Locating user location',
-          style: GoogleFonts.varela(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         elevation: 0,
-        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Stack(
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.only(left: 15, top: 15),
                   child: Container(
                     child: Text(
                         'Enable your location ! \nFor new live shipping experience',
@@ -159,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: double.infinity,
                       margin: EdgeInsets.only(top: 500),
                       decoration: BoxDecoration(
-                          color: Colors.redAccent,
+                          color: Colors.yellow[600],
                           borderRadius: BorderRadius.circular(5.0)),
                       child: TextButton(
                         onPressed: () async {

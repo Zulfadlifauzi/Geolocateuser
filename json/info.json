@@ -1,0 +1,27 @@
+[
+    {
+      "title": "Glutes",
+      "img": "assets/glute.png"
+    },
+    {
+      "title": "Abs",
+      "img": "assets/abs.png"
+    },
+    {
+      "title": "Calves",
+      "img": "assets/calves.png"
+    },
+    {
+      "title": "Arms",
+      "img": "assets/biceps.png"
+    },
+    {
+      "title": "Backs",
+      "img": "assets/backs.png"
+    },
+    {
+      "title": "Shoulders",
+      "img": "assets/shoulders.png"
+    }
+
+  ]

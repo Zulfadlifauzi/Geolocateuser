@@ -23,9 +23,13 @@ class _LocalPushState extends State<LocalPush> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: yellowClr,
+      backgroundColor: Colors.lightBlueAccent,
       appBar: AppBar(
-        title: const Text('Push Notifications'),
+        backgroundColor: Colors.yellow[600],
+        title: const Text(
+          'Push Notifications',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
