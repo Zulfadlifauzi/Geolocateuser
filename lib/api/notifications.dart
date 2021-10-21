@@ -1,12 +1,18 @@
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:locategeouser/screens/new.dart';
 // import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class NotifyHelper {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin(); //
+      FlutterLocalNotificationsPlugin();
+
+  late BuildContext context; //
 
   initializeNotification() async {
     tz.initializeTimeZones();
@@ -29,16 +35,8 @@ class NotifyHelper {
         onSelectNotification: selectNotification);
   }
 
-  Future selectNotification(String? payload) async {
-    if (payload != null) {
-      print('notification payload: $payload');
-    } else {
-      print("Notification Done");
-    }
-    Get.to(() => Container(
-          color: Colors.white,
-        ));
-  }
+  Future selectNotification(String? payload) => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => NewPages(payload)));
 
   displayNotification({required String title, required String body}) async {
     print("Successfully");
@@ -94,30 +92,30 @@ class NotifyHelper {
   }
 
   Future onDidReceiveLocalNotification(
-      int? id, String? title, String? body, String? payload) async {
-    Get.dialog(const Text('Welcome to flutter'));
+      int id, String? title, String? body, String? payload) async {
     // display a dialog with the notification details, tap ok to go to another page
-    // showDialog(
-    //   //context: context,
-    //   builder: (BuildContext context) => CupertinoAlertDialog(
-    //     title: Text(title),
-    //     content: Text(body),
-    //     actions: [
-    //       CupertinoDialogAction(
-    //         isDefaultAction: true,
-    //         child: Text('Ok'),
-    //         onPressed: () async {
-    //           Navigator.of(context, rootNavigator: true).pop();
-    //           await Navigator.push(
-    //             context,
-    //             MaterialPageRoute(
-    //               builder: (context) => SecondScreen(payload),
-    //             ),
-    //           );
-    //         },
-    //       )
-    //     ],
-    //   ),
-    // );
+    showDialog(
+      //context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(title!),
+        content: Text(body!),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text('Ok'),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewPages(payload),
+                ),
+              );
+            },
+          )
+        ],
+      ),
+      context: null!,
+    );
   }
 }
